@@ -4,6 +4,7 @@ from tile import Tile
 from player import Player
 from debug import debug
 from support import *
+from random import choice
 
 
 class Level:
@@ -20,14 +21,39 @@ class Level:
         self.create_map()
 
     def create_map (self): # eu vou me matar
-        layout = {
-            "boundary": import_csv_layout("./map/map_FloorBlocks.csv")
+        layouts = {
+           "boundary": import_csv_layout("./graphics/tilemap/floor.csv"),
+           #"detail": import_csv_layout (".graphics.tilemap/detail.csv"),
+           #"object": import_csv_layout ("./graphics/tilemap/")
         }
-        #whenever we create a tile, we will have visible tiles and obstacle tiles // collision
-        #for row_index, row in enumerate(WORLD_MAP):
-         #   for col_index, col in enumerate(row):
-          #      x = col_index * TILESIZE
-           #     y = row_index * TILESIZE
+
+        graphics = {
+            "detail": import_folder ("./graphics/tilemap/detail")
+        }
+        print (graphics)
+        # quando a gente criar um tile, vai ter os visíveis e de obstáculo // collision
+
+        for style, layout in layouts.items():
+
+            for row_index, row in enumerate(layout):
+                for col_index, col in enumerate(row):
+                    if col != "-1":
+                
+                        x = col_index * TILESIZE
+                        y = row_index * TILESIZE
+
+                        if style == "boundary":
+                            Tile((x, y), [ self.obstacle_sprites], "invisible")
+
+                        if style == "detail":
+                            # detalhes na neve
+                            random_detail_image = choice (graphics ["detail"])
+                            Tile ((x, y), [self.visible_sprites, self.obstacle_sprites], "detail", random_detail_image)
+                            
+
+                        if style == "object":
+                            # object tile
+                            pass
             #if col == "x":
              #   Tile((x, y), [self.visible_sprites])
             #if col == "p":

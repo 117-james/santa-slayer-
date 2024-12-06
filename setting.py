@@ -1,8 +1,9 @@
 import pygame
-WIDTH = 1280
-HEIGHT = 720
+WIDTH = 640
+HEIGHT = 480
 FPS = 60
 TILESIZE = 32
+
 
 WORLD_MAP = [
 ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
