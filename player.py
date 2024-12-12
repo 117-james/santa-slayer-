@@ -20,7 +20,6 @@ class Player (pygame.sprite.Sprite):
 
         # movement
         self.direction = pygame.math.Vector2() # vetor x e y
-        self.sp = 2 # speed
         self.attacking = False
         self.attack_cooldown = 400
         self.attack_time = None # criar timer
@@ -34,6 +33,14 @@ class Player (pygame.sprite.Sprite):
         self.can_switch_weapon = True
         self.weapon_switch_time = None
         self.switch_duration_cooldown = 200
+
+
+        #stat
+        self.stats = {"health": 100, "energy": 50, "attack": 10, "magic": 5, "speed": 5}
+        self.health = self.stats["health"] * 0.5
+        self.energy = self.stats["energy"] * 0.8
+        self.xp = 666
+        self.sp = self.stats["speed"]
 
     def import_player_asset (self):
         character_path = "./graphics/player/"
@@ -81,8 +88,8 @@ class Player (pygame.sprite.Sprite):
         if keys [pygame.K_q] and self.can_switch_weapon:
             self.can_switch_weapon = False
             self.weapon_switch_time = pygame.time.get_ticks()
-            
-            if self.weapon_index < len(list(weapon_data.keys())):
+
+            if self.weapon_index < len(list(weapon_data.keys())) - 1: #resolvido.
                 self.weapon_index += 1 # só tem 3 AARGGGHHHHH
             else:
                 self.weapon_index = 0

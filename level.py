@@ -7,6 +7,7 @@ from support import *
 from random import choice
 from player import *
 from weapon import *
+from ui import *
 
 class Level:
     # central do jogo inteiro
@@ -24,6 +25,9 @@ class Level:
         self.current_attack = None
 
         self.create_map()
+
+        # interface
+        self.ui = UI()
 
     def create_map (self): # eu vou me matar
         layouts = {
@@ -71,7 +75,7 @@ class Level:
         # atualizando e rodando o jogo
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
-        debug (self.player.status)
+        self.ui.display(self.player)
 
 class YCameraGroup (pygame.sprite.Group): # esse grupo de sprite vai funcionar como uma câmera através das coordenadas y
     
