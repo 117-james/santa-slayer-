@@ -16,7 +16,7 @@ def import_csv_layout(path):
 
 # CSV são arquivos de texto que usam vírgulas pra separar valores
 
-def import_folder(path):
+def import_folder(path): # importar todos os detalhes como superfície
 
     surface_list = []
     

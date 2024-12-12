@@ -5,7 +5,8 @@ from player import Player
 from debug import debug
 from support import *
 from random import choice
-
+from player import *
+from weapon import *
 
 class Level:
     # central do jogo inteiro
@@ -18,17 +19,20 @@ class Level:
         self.visible_sprites = YCameraGroup() # visible sprites são aqueles que vão ser desenhados
         self.obstacle_sprites = pygame.sprite.Group() # sprites que colidem com o player
 
+
+        #attack sprite
+        self.current_attack = None
+
         self.create_map()
 
     def create_map (self): # eu vou me matar
         layouts = {
-           "boundary": import_csv_layout("./graphics/tilemap/floor.csv"),
-           #"detail": import_csv_layout (".graphics.tilemap/detail.csv"),
-           #"object": import_csv_layout ("./graphics/tilemap/")
+           "boundary": import_csv_layout("./graphics/tilemap/boundary.csv"),
+           "object": import_csv_layout ("./graphics/tilemap/detail.csv")
         }
 
         graphics = {
-            "detail": import_folder ("./graphics/tilemap/detail")
+            "object": import_folder (".graphics/tilemap")
         }
         print (graphics)
         # quando a gente criar um tile, vai ter os visíveis e de obstáculo // collision
@@ -45,25 +49,29 @@ class Level:
                         if style == "boundary":
                             Tile((x, y), [ self.obstacle_sprites], "invisible")
 
-                        if style == "detail":
-                            # detalhes na neve
-                            random_detail_image = choice (graphics ["detail"])
-                            Tile ((x, y), [self.visible_sprites, self.obstacle_sprites], "detail", random_detail_image)
-                            
-
                         if style == "object":
                             # object tile
+                            #surf = graphics ["object"][int(col)]
+                            #Tile((x, y), [self.visible_sprites, self.obstacle_sprites], "object", surf)
                             pass
-            #if col == "x":
-             #   Tile((x, y), [self.visible_sprites])
-            #if col == "p":
-             #   self.player = Player ((400, 300), [self.visible_sprites], self.obstacle_sprites)
-        self.player = Player ((400, 300), [self.visible_sprites], self.obstacle_sprites)
+            
+        self.player = Player ((400, 300), [self.visible_sprites], self.obstacle_sprites, self.create_attack, self.destroy_attack)
+
+    def create_attack (self):
+        self.current_attack = Weapon(self.player, [self.visible_sprites])
+
+    def destroy_attack (self):
+        if self.current_attack:
+            self.current_attack.kill()
+        self.current_attack = None
+
+
     def run (self):
 
         # atualizando e rodando o jogo
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
+        debug (self.player.status)
 
 class YCameraGroup (pygame.sprite.Group): # esse grupo de sprite vai funcionar como uma câmera através das coordenadas y
     
@@ -77,7 +85,7 @@ class YCameraGroup (pygame.sprite.Group): # esse grupo de sprite vai funcionar c
         self.offset = pygame.math.Vector2() # o truque foi conectar o offset no player
 
         # chão
-        self.floor_surf = pygame.image.load("./graphics/tilemap/map.png").convert()
+        self.floor_surf = pygame.image.load("./graphics/tilemap/map.png").convert() # png do mapa, literalmente
         self.floor_rect = self.floor_surf.get_rect (topleft = (0, 0))
 
     def custom_draw(self, player):
