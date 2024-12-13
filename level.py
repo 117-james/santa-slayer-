@@ -62,7 +62,7 @@ class Level:
                             pass
 
                         if style == "entities":
-                            if col == "73":
+                            if col == "1028":
                                 self.player = Player (
                                 (x,y), [self.visible_sprites],
                                 self.obstacle_sprites,
@@ -70,7 +70,10 @@ class Level:
                                 self.destroy_attack,
                                 self.create_magic)
                             else:
-                                Mob ("gingerbread", (x,y), [self.visible_sprites])
+                                if col == "1027": mob_name = "snowman"
+                                elif col == "1013": mob_name = "gingerbread"
+                                elif col == "": mob_name = "krampus"
+                                Mob (mob_name, (x,y), [self.visible_sprites], self.obstacle_sprites)
 
             
         
@@ -94,6 +97,7 @@ class Level:
         # atualizando e rodando o jogo
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
+        self.visible_sprites.mob_update(self.player)
         self.ui.display(self.player)
 
 class YCameraGroup (pygame.sprite.Group): # esse grupo de sprite vai funcionar como uma câmera através das coordenadas y
@@ -112,6 +116,7 @@ class YCameraGroup (pygame.sprite.Group): # esse grupo de sprite vai funcionar c
         self.floor_rect = self.floor_surf.get_rect (topleft = (0, 0))
 
     def custom_draw(self, player):
+
         
         # PORRAAAAAAAA
         self.offset.x = player.rect.centerx - self.half_width
@@ -126,3 +131,8 @@ class YCameraGroup (pygame.sprite.Group): # esse grupo de sprite vai funcionar c
         for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit (sprite.image, offset_pos)
+
+    def mob_update(self, player):
+        mob_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, "sprite_type") and sprite.sprite_type == "mob"]
+        for mob in mob_sprites:
+            mob.mob_update(player)
