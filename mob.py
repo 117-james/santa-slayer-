@@ -2,6 +2,7 @@ import pygame
 from setting import *
 from entity import *
 from support import *
+from player import *
 
 class Mob (Entity):
     def __init__ (self, mob_name, pos, groups, obstacle_sprites): #feijoada de PUTAAAAA
@@ -13,7 +14,7 @@ class Mob (Entity):
         #graphics
         self.import_graphics(mob_name)
         self.status = "idle"
-        self.image = self.animation [self.status][self.frame_index]
+        self.image = self.animations [self.status][self.frame_index]
 
         # mov
         self.rect = self.image.get_rect (topleft = pos)
@@ -39,10 +40,10 @@ class Mob (Entity):
 
 
     def import_graphics (self, name):
-        self.animation = {"idle":[], "move":[], "attack":[]}
+        self.animations = {"idle":[], "move":[], "attack":[]}
         main_path = f"./graphics/mob/{name}/"
-        for animation in self.animation.keys():
-            self.animation[animation] = import_folder(main_path + animation)
+        for animation in self.animations.keys():
+            self.animations[animation] = import_folder(main_path + animation)
 
     def get_player_distance_direction (self, player):
 
@@ -65,7 +66,7 @@ class Mob (Entity):
         if distance <= self.attack_radius and self.can_attack:
             if self.status != "attack":
                 self.frame_index = 0
-
+            self.status = "attack"
         elif distance <= self.notice_radius:
             self.status = "move"
 
@@ -73,15 +74,16 @@ class Mob (Entity):
             self.status = "idle"    
 
     def action(self, player):
-        if self.status == "attack":
+        if self.status == "attack" and self.can_attack:
             self.attack_time = pygame.time.get_ticks()
+            self.can_attack = False
         elif self.status == "move":
             self.direction = self.get_player_distance_direction(player)[1]
         else:
             self.direction = pygame.math.Vector2()
 
     def animate(self):
-        animation = self.animation[self.status]
+        animation = self.animations[self.status]
         
         self.frame_index += self.animation_sp
         if self.frame_index >= len(animation):
