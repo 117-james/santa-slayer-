@@ -28,3 +28,16 @@ weapon_data = {
     "axe": {"cooldown": 400, "damage": 30, "graphics": "./graphics/weapon/axe/full.png"},
     "lance": {"cooldown": 300, "damage": 20, "graphics": "./graphics/weapon/lance/full.png"}
 }
+
+#magic
+magic_data = {
+    "spririt": {"strength": 10, "cost": 20, "graphics": "./graphics/magic/spirit/flame.png"},
+    "heal": {"strength": 5, "cost": 10, "graphics": "./graphics/magic/heal/heal.png"}
+}
+
+#mob
+mob_data ={
+    "snowman": {"health": 50, "xp": 80, "damage": 15, "attack_type": "snow", "attack_sound": "./audio/attack/", "speed": 3, "resistance": 10, "attack_radius": 120, "notice_radius": 300},
+    "gingerbread": {"health": 30, "xp": 40, "damage": 10, "attack_type": "cane", "attack_sound": "", "speed": 2, "resistance": 8, "attack_radius": 10, "notice_radius": 200},
+    "krampus": {}
+}

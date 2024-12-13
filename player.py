@@ -1,12 +1,13 @@
 import pygame
 from setting import *
 from support import *
+from entity import *
 
 
-class Player (pygame.sprite.Sprite):
+class Player (Entity):
 
 
-    def __init__ (self, pos, groups, obstacle_sprites, create_attack, destroy_attack):
+    def __init__ (self, pos, groups, obstacle_sprites, create_attack, destroy_attack, create_magic):
         super().__init__(groups)
         self.image = pygame.image.load("./graphics/player/down_idle/idle_down.png").convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
@@ -15,11 +16,8 @@ class Player (pygame.sprite.Sprite):
         #graphic setup
         self.import_player_asset ()
         self.status = "down"
-        self.frame_index = 0
-        self.animation_sp = 0.5
 
         # movement
-        self.direction = pygame.math.Vector2() # vetor x e y
         self.attacking = False
         self.attack_cooldown = 400
         self.attack_time = None # criar timer
@@ -33,6 +31,14 @@ class Player (pygame.sprite.Sprite):
         self.can_switch_weapon = True
         self.weapon_switch_time = None
         self.switch_duration_cooldown = 200
+
+        #magic
+        self.create_magic = create_magic
+        self.magic_index = 0
+        self.magic = list(magic_data.keys())[self.magic_index]
+        self.can_switch_magic = True
+        self.magic_switch_time = None
+
 
 
         #stat
@@ -82,8 +88,23 @@ class Player (pygame.sprite.Sprite):
         #magic
         if keys [pygame.K_LCTRL] and not self.attacking:
             self.attacking = True
-            self.attack_time = pygame.time.get_ticks ()
-            print ("magic")
+            self.attack_time = pygame.time.get_ticks()
+            style = list(magic_data.keys())[self.magic_index]
+            strength = list(magic_data.values())[self.magic_index]["strength"] + self.stats["magic"]
+            cost = list(magic_data.values())[self.magic_index]["cost"]
+            self.create_magic (style, strength, cost)
+
+        if keys [pygame.K_e] and self.can_switch_magic:
+            self.can_switch_magic = False
+            self.magic_switch_time = pygame.time.get_ticks()
+
+            if self.magic_index < len(list(magic_data.keys())) - 1: #resolvido.
+                self.magic_index += 1 # só tem 3 AARGGGHHHHH
+            else:
+                self.magic_index = 0
+
+            self.magic = list(magic_data.keys())[self.magic_index]
+        
 
         if keys [pygame.K_q] and self.can_switch_weapon:
             self.can_switch_weapon = False
@@ -116,46 +137,6 @@ class Player (pygame.sprite.Sprite):
             if "attack" in self.status:
                 self.status = self.status.replace ("_attack", "")
 
-    def move (self, sp):
-        # então, tive que fazer uns ajustes
-        # quando o player movia diagonalmente, a velocidade aumentava, então normalizei a direção
-        # basicamente mudando o tamanho do vetor pra 1 
-        if self.direction.magnitude()  != 0: # um vetor de 0 não pode ser normalizado
-            self.direction = self.direction.normalize()
-            # não importa mais qual direção o jogador move, o tamanho do vetor sempre vai ser 1
-        self.hitbox.x += self.direction.x * sp
-        self.collision ("horizontal")
-        self.hitbox.y += self.direction.y * sp
-        self.collision ("vertical")
-        self.rect.center = self.hitbox.center
-        
-
-    def collision (self, direction):
-        
-        if direction == "horizontal":
-
-            for sprite in self.obstacle_sprites:
-
-                if sprite.hitbox.colliderect(self.hitbox):
-
-                    if self.direction.x > 0: # move pra direita
-                        self.hitbox.right = sprite.hitbox.left
-                    
-                    if self.direction.x < 0:
-                        self.hitbox.left = sprite.hitbox.right
-
-        if direction == "vertical":
-            
-            for sprite in self.obstacle_sprites:
-
-                if sprite.hitbox.colliderect (self.hitbox):
-
-                    if self.direction.y > 0:
-                        self.hitbox.bottom = sprite.hitbox.top
-
-                    if self.direction.y < 0:
-                        self.hitbox.top = sprite.hitbox.bottom
-
     def cooldown (self):
         current_time = pygame.time.get_ticks () # if só roda uma vez mas o get ticks faz rodar infinitamente
 
@@ -166,6 +147,10 @@ class Player (pygame.sprite.Sprite):
         if not self.can_switch_weapon:
             if current_time - self.weapon_switch_time >= self.switch_duration_cooldown:
                 self.can_switch_weapon = True
+
+        if not self.can_switch_magic:
+            if current_time - self.magic_switch_time >= self.switch_duration_cooldown:
+                self.can_switch_magic = True
 
     def animate (self):
         animation = self.animations [self.status]

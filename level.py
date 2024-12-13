@@ -8,6 +8,7 @@ from random import choice
 from player import *
 from weapon import *
 from ui import *
+from mob import *
 
 class Level:
     # central do jogo inteiro
@@ -32,7 +33,8 @@ class Level:
     def create_map (self): # eu vou me matar
         layouts = {
            "boundary": import_csv_layout("./graphics/tilemap/boundary.csv"),
-           "object": import_csv_layout ("./graphics/tilemap/detail.csv")
+           "object": import_csv_layout ("./graphics/tilemap/detail.csv"),
+           "entities": import_csv_layout ("./graphics/tilemap/entities.csv")
         }
 
         graphics = {
@@ -58,11 +60,28 @@ class Level:
                             #surf = graphics ["object"][int(col)]
                             #Tile((x, y), [self.visible_sprites, self.obstacle_sprites], "object", surf)
                             pass
+
+                        if style == "entities":
+                            if col == "73":
+                                self.player = Player (
+                                (x,y), [self.visible_sprites],
+                                self.obstacle_sprites,
+                                self.create_attack,
+                                self.destroy_attack,
+                                self.create_magic)
+                            else:
+                                Mob ("gingerbread", (x,y), [self.visible_sprites])
+
             
-        self.player = Player ((400, 300), [self.visible_sprites], self.obstacle_sprites, self.create_attack, self.destroy_attack)
+        
 
     def create_attack (self):
         self.current_attack = Weapon(self.player, [self.visible_sprites])
+
+    def create_magic (self, style, strength, cost):
+        print(style)
+        print(strength)
+        print(cost)
 
     def destroy_attack (self):
         if self.current_attack:
