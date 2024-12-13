@@ -3,6 +3,7 @@ import sys
 from setting import *
 from level import *
 from player import *
+from menu import mostrar_configuracoes
 
 # playlist pra programar bem:
 # i'm with you // avril lavigne
@@ -11,26 +12,23 @@ from player import *
 # peach // kevin abstract
 
 class Game:
-    def __init__ (self):
-        # setup básico
+    def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("SANTA SLAYER: BLOOD MOON")
         self.clock = pygame.time.Clock()
         self.level = Level()
 
-    # Inicializar música para o menu
-        pygame.mixer.music.load("./audio/Santa_Baby.mp3")  
+        # Inicializar música para o menu
+        pygame.mixer.music.load("./audio/Santa_Baby.mp3")
         pygame.mixer.music.set_volume(0.5)
-        pygame.mixer.music.play(-1)  # Toca em loop infinito
+        pygame.mixer.music.play(-1)
 
-        
-    def run (self):
-
-         # Parar música do menu e começar música de gameplay
+    def run(self):
+        # Música do jogo
         pygame.mixer.music.stop()
-        pygame.mixer.music.load("./audio/Wicked Game.mp3") 
-        pygame.mixer.music.play(-1) 
+        pygame.mixer.music.load("./audio/Wicked Game.mp3")
+        pygame.mixer.music.play(-1)
 
         while True:
             for event in pygame.event.get():
@@ -38,6 +36,12 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
+                # Abrir menu ao pressionar ESC
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        mostrar_configuracoes()  # Exibe o menu de configurações
+
+            # Atualizar tela do jogo
             self.screen.fill("grey")
             self.level.run()
             pygame.display.update()
