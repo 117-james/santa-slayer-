@@ -32,15 +32,15 @@ class Level:
 
     def create_map (self): # eu vou me matar
         layouts = {
-           "boundary": import_csv_layout("./graphics/tilemap/boundary.csv"),
-           "object": import_csv_layout ("./graphics/tilemap/detail.csv"),
-           "entities": import_csv_layout ("./graphics/tilemap/entities.csv")
+           "boundary": import_csv_layout("./graphics/tilemap/csv/boundary.csv"),
+           "detail": import_csv_layout("./graphics/tilemap/csv/detail.csv"),
+           "entities": import_csv_layout("./graphics/tilemap/csv/entities.csv")
         }
 
         graphics = {
-            "object": import_folder (".graphics/tilemap")
+            "details": import_folder("./graphics/tilemap/details")
         }
-        print (graphics)
+
         # quando a gente criar um tile, vai ter os visíveis e de obstáculo // collision
 
         for style, layout in layouts.items():
@@ -53,16 +53,15 @@ class Level:
                         y = row_index * TILESIZE
 
                         if style == "boundary":
-                            Tile((x, y), [ self.obstacle_sprites], "invisible")
+                            Tile((x, y), [self.visible_sprites,self.obstacle_sprites], "invisible")
 
-                        if style == "object":
-                            #surf = graphics["object"][int(col)]
-                            #Tile((x, y), [self.visible_sprites, self.obstacle_sprites], "object", surf)
-                            #calma, preciso pensar como faz isso
-                            pass
+                        if style == "detail":
+                            surf = graphics["details"][int(col)]
+                            Tile((x,y), [self.visible_sprites,self.obstacle_sprites], "detail", surf)
+
 
                         if style == "entities":
-                            if col == "1028":
+                            if col == "68":
                                 self.player = Player (
                                 (x,y), [self.visible_sprites],
                                 self.obstacle_sprites,
@@ -70,9 +69,9 @@ class Level:
                                 self.destroy_attack,
                                 self.create_magic)
                             else:
-                                if col == "1027": mob_name = "snowman"
-                                elif col == "1013": mob_name = "gingerbread"
-                                elif col == "": mob_name = "krampus"
+                                if col == "84": mob_name = "snowman"
+                                elif col == "69": mob_name = "gingerbread"
+                                elif col == "54": mob_name = "krampus"
                                 Mob (mob_name, (x,y), [self.visible_sprites], self.obstacle_sprites)
 
             

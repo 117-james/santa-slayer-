@@ -1,6 +1,6 @@
 import pygame
 from setting import *
-from entity import *
+from entity import Entity
 from support import *
 from player import *
 
@@ -14,7 +14,7 @@ class Mob (Entity):
         #graphics
         self.import_graphics(mob_name)
         self.status = "idle"
-        self.image = self.animations [self.status][self.frame_index]
+        self.image = self.animations[self.status][self.frame_index]
 
         # mov
         self.rect = self.image.get_rect (topleft = pos)
@@ -36,7 +36,7 @@ class Mob (Entity):
         #interaction
         self.can_attack = True
         self.attack_time = None
-        self.attack_cooldown = 400
+        self.attack_cooldown = 500
 
 
     def import_graphics (self, name):
@@ -44,7 +44,7 @@ class Mob (Entity):
         main_path = f"./graphics/mob/{name}/"
         for animation in self.animations.keys():
             self.animations[animation] = import_folder(main_path + animation)
-
+            
     def get_player_distance_direction (self, player):
 
         #odeio vetor
@@ -78,9 +78,9 @@ class Mob (Entity):
             self.attack_time = pygame.time.get_ticks()
             self.can_attack = False
         elif self.status == "move":
-            self.direction = self.get_player_distance_direction(player)[1]
+            self.direction = self.get_player_distance_direction(player)[1] #1 = índice direção
         else:
-            self.direction = pygame.math.Vector2()
+            self.direction = pygame.math.Vector2() # se o player sair do raio, ele para
 
     def animate(self):
         animation = self.animations[self.status]
@@ -90,7 +90,6 @@ class Mob (Entity):
 
             if self.status == "attack":
                 self.can_attack = False #o player só para de poder atacar depois da animação
-
             self.frame_index = 0
 
         self.image = animation[int(self.frame_index)]

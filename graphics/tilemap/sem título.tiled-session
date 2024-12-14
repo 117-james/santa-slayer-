@@ -1,0 +1,36 @@
+{
+    "activeFile": "C:/Users/jessi/OneDrive/Documentos/coding/data/tmx/official.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "C:/Users/jessi/OneDrive/Documentos/coding/data/tmx/official.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 723,
+                "y": 956
+            }
+        },
+        "C:/Users/jessi/OneDrive/Documentos/coding/data/tsx/sprites.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
+        "C:/Users/jessi/OneDrive/Documentos/coding/data/tsx/tiles.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 0.25,
+            "scaleInEditor": 0.25
+        }
+    },
+    "last.exportedFilePath": "C:/Users/jessi/OneDrive/Documentos/coding/graphics/tilemap",
+    "openFiles": [
+        "C:/Users/jessi/OneDrive/Documentos/coding/data/tmx/official.tmx",
+        "C:/Users/jessi/OneDrive/Documentos/coding/data/tsx/tiles.tsx"
+    ],
+    "project": "sem título.tiled-project",
+    "recentFiles": [
+        "C:/Users/jessi/OneDrive/Documentos/coding/data/tsx/tiles.tsx",
+        "C:/Users/jessi/OneDrive/Documentos/coding/data/tmx/official.tmx",
+        "C:/Users/jessi/OneDrive/Documentos/coding/data/tsx/sprites.tsx"
+    ]
+}

@@ -37,7 +37,7 @@ magic_data = {
 
 #mob
 mob_data ={
-    "snowman": {"health": 50, "xp": 80, "damage": 15, "attack_type": "snow", "attack_sound": "./audio/attack/", "speed": 3, "resistance": 10, "attack_radius": 120, "notice_radius": 300},
-    "gingerbread": {"health": 30, "xp": 40, "damage": 10, "attack_type": "cane", "attack_sound": "", "speed": 2, "resistance": 8, "attack_radius": 10, "notice_radius": 200},
-    "krampus": {}
+    "snowman": {"health": 50, "xp": 80, "damage": 15, "attack_type": "snow", "attack_sound": "./audio/attack/", "speed": 3, "resistance": 10, "attack_radius": 100, "notice_radius": 200},
+    "gingerbread": {"health": 30, "xp": 40, "damage": 10, "attack_type": "cane", "attack_sound": "", "speed": 2, "resistance": 8, "attack_radius": 100, "notice_radius": 200},
+    "krampus": {"health": 200, "xp": 666, "damage": 30, "attack_type": "grinch", "attack_sound": "", "speed": 5, "resistance": 30, "attack_radius": 1000, "notice_radius": 500}
 }
