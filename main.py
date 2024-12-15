@@ -17,7 +17,7 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("SANTA SLAYER: BLOOD MOON")
         self.clock = pygame.time.Clock()
-        self.level = Level()
+        self.level = Level(self.clock)
 
         # Inicializar música para o menu
         pygame.mixer.music.load("./audio/Santa_Baby.mp3")

@@ -31,13 +31,13 @@ weapon_data = {
 
 #magic
 magic_data = {
-    "spririt": {"strength": 10, "cost": 20, "graphics": "./graphics/magic/spirit/flame.png"},
+    "spririt": {"strength": 10, "cost": 20, "graphics": "./graphics/magic/spirit/spirit.png"},
     "heal": {"strength": 5, "cost": 10, "graphics": "./graphics/magic/heal/heal.png"}
 }
 
 #mob
 mob_data ={
-    "snowman": {"health": 50, "xp": 80, "damage": 15, "attack_type": "snow", "attack_sound": "./audio/attack/", "speed": 3, "resistance": 10, "attack_radius": 100, "notice_radius": 200},
+    "snowman": {"health": 50, "xp": 80, "damage": 15, "attack_type": "snow", "attack_sound": "./audio/attack/", "speed": 3, "resistance": 10, "attack_radius": 70, "notice_radius": 200},
     "gingerbread": {"health": 30, "xp": 40, "damage": 10, "attack_type": "cane", "attack_sound": "", "speed": 2, "resistance": 8, "attack_radius": 100, "notice_radius": 200},
-    "krampus": {"health": 200, "xp": 666, "damage": 30, "attack_type": "grinch", "attack_sound": "", "speed": 5, "resistance": 30, "attack_radius": 1000, "notice_radius": 500}
+    "krampus": {"health": 200, "xp": 666, "damage": 30, "attack_type": "grinch", "attack_sound": "", "speed": 3, "resistance": 30, "attack_radius": 200, "notice_radius": 300}
 }
