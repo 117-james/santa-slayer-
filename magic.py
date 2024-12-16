@@ -11,10 +11,11 @@ class Magic:
 
         if player.energy >= cost:
             player.health += strength
-            player.energy -= cost
-            if player.health >= player.stats["health"]:
+            
+            if player.health > player.stats["health"]:
                 player.health = player.stats["health"]
 
+            player.energy -= cost
             self.animation_player.create_particles("aura", player.rect.center, groups)
             self.animation_player.create_particles("heal", player.rect.center + pygame.math.Vector2(0, -60), groups)
 
@@ -22,7 +23,7 @@ class Magic:
     def spirit(self, player, cost, groups):
         #AAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         if player.energy >= cost:
-            #player.energy -= cost
+            player.energy -= cost
 
             if player.status.split("_")[0] == "right":
                 direction = pygame.math.Vector2(1,0)
