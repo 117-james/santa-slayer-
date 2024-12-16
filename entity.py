@@ -5,7 +5,7 @@ class Entity (pygame.sprite.Sprite):
     def __init__ (self, groups):
         super().__init__(groups)
         self.frame_index = 0
-        self.animation_sp = 0.2
+        self.animation_sp = 0.5
         self.direction = pygame.math.Vector2() # x e y
     
     def move (self, sp):
