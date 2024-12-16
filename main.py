@@ -27,7 +27,8 @@ class Game:
     def run(self):
         # Música do jogo
         pygame.mixer.music.stop()
-        pygame.mixer.music.load("./audio/Wicked Game.mp3")
+        pygame.mixer.music.load("./audio/Santa_Baby.mp3")
+        pygame.mixer.music.set_volume(0)
         pygame.mixer.music.play(-1)
 
         while True:

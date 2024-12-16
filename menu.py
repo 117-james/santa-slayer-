@@ -1,5 +1,6 @@
 import pygame
 import sys
+from setting import *
 
 pygame.init()
 
@@ -14,7 +15,7 @@ preto = (0, 0, 0)
 vermelho = (255, 0, 0)
 
 # Fonte 8-bit
-fonte_8bit = pygame.font.Font("./graphics/fonts/PressStart2P-Regular.ttf", 20)
+fonte_8bit = pygame.font.Font(UI_FONT, 30)
 
 # Configurações de volume
 volume_jogo = 50  # Volume para efeitos ou mecânicas do jogo
@@ -23,11 +24,21 @@ volume_musica = 50  # Volume da música
 opcoes = ["Volume do Jogo", "Volume da Música"]  # Ajuste as opções
 indice_selecionado = 0
 
+background = pygame.image.load("./graphics/background/background.png").convert()
+background = pygame.transform.scale(background, (largura, altura))  # Correct scaling
+
+background_alpha = pygame.Surface((largura, altura), pygame.SRCALPHA)
+background_alpha.blit(background, (0, 0))
+background_alpha.set_alpha(150)
+
+
+
 def mostrar_configuracoes():
     global volume_jogo, volume_musica, indice_selecionado
     rodando = True
     while rodando:
-        tela.fill(branco)
+        tela.blit(background_alpha, (0, 0))
+
 
         # Título
         titulo_texto = fonte_8bit.render("CONFIGURACOES", True, preto)

@@ -6,9 +6,9 @@ def play_cutscene(screen, outcome):
     screen.fill("black")
     font = pygame.font.Font(UI_FONT, 20)
 
-    if outcome == "krampus_defeated":
+    if outcome == "krampus defeated":
         text = "KRAMPUS has been defeated! peace returns to the land."
-    elif outcome == "player_defeated":
+    elif outcome == "player defeated":
         text = "you were defeated, weakling.. KRAMPUS reigns supreme."
     else:
         text = "unknown outcome."

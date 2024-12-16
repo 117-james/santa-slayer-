@@ -9,6 +9,7 @@ class AnimationPlayer:
             #magic
             "spirit": import_folder("./graphics/magic/spirit/frames"),
             "heal": import_folder("./graphics/magic/heal/frames"),
+            "aura": import_folder("./graphics/magic/aura"),
 
 
             #attacks
@@ -23,6 +24,8 @@ class AnimationPlayer:
             "krampus": import_folder("./graphics/magic/nova")
 
         }
+    
+
 
     def create_particles(self,animation_type, pos, groups):
         animation_frames = self.frames[animation_type]
@@ -32,11 +35,14 @@ class AnimationPlayer:
 class ParticleEffect(pygame.sprite.Sprite):
     def __init__ (self, pos, animation_frames, groups):
         super().__init__(groups)
+        self.sprite_type = "magic"
         self.frame_index = 0
-        self.animation_sp = 0.15
+        self.animation_sp = 0.5
         self.frames = animation_frames
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_rect(center=pos)
+
+    
 
     def animate(self):
         self.frame_index += self.animation_sp

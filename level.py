@@ -10,7 +10,9 @@ from weapon import *
 from ui import *
 from mob import *
 from final import final_battle
+from cutscene import *
 from particles import *
+from magic import *
 
 class Level:
     # central do jogo inteiro
@@ -37,6 +39,7 @@ class Level:
 
         #particle animation
         self.animation_player = AnimationPlayer()
+        self.magic_player = Magic(self.animation_player)
 
 
     def create_map (self): # eu vou me matar
@@ -89,13 +92,22 @@ class Level:
                             else:
                                 if col == "54":
                                     mob_name = "krampus"
-                                    krampus = Mob(mob_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.damage_player, self.trigger_death_particles)
+                                    krampus = Mob(mob_name, (x, y), 
+                                                [self.visible_sprites, self.attackable_sprites],
+                                                self.obstacle_sprites, self.damage_player,
+                                                self.trigger_death_particles, self.add_xp)
                                 elif col == "84":
                                     mob_name = "snowman"
-                                    Mob (mob_name, (x,y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites,self.damage_player,self.trigger_death_particles)
+                                    Mob (mob_name, (x,y),
+                                        [self.visible_sprites, self.attackable_sprites],
+                                        self.obstacle_sprites,self.damage_player,
+                                        self.trigger_death_particles,self.add_xp)
                                 elif col == "69":
                                     mob_name = "gingerbread"
-                                    Mob (mob_name, (x,y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites,self.damage_player,self.trigger_death_particles)
+                                    Mob (mob_name, (x,y),
+                                        [self.visible_sprites, self.attackable_sprites],
+                                        self.obstacle_sprites,self.damage_player,
+                                        self.trigger_death_particles,self.add_xp)
                                 
 
             
@@ -105,9 +117,13 @@ class Level:
         self.current_attack = Weapon(self.player, [self.visible_sprites, self.attack_sprites])
 
     def create_magic (self, style, strength, cost):
-        print(style)
-        print(strength)
-        print(cost)
+
+        if style == "heal":
+            self.magic_player.heal(self.player, strength, cost, [self.visible_sprites])
+
+        if style == "spirit":
+            self.magic_player.spirit(self.player, cost, [self.visible_sprites, self.attack_sprites])
+
 
     def destroy_attack (self):
         if self.current_attack:
@@ -136,6 +152,11 @@ class Level:
     def trigger_death_particles(self,pos,particle_type):
         self.animation_player.create_particles(particle_type, pos, self.visible_sprites)
 
+    def add_xp (self, amount):
+
+        self.player.xp += amount
+
+
     def run (self):
 
         # atualizando e rodando o jogo
@@ -147,14 +168,17 @@ class Level:
     
 
         #krampus radius
-        # Krampus battle trigger based on proximity
+        #krampus battle trigger based on proximity
         krampus_sprite = next((sprite for sprite in self.visible_sprites if getattr(sprite, "mob_name", None) == "krampus"), None)
         if krampus_sprite:
             distance = pygame.math.Vector2(self.player.rect.center).distance_to(pygame.math.Vector2(krampus_sprite.rect.center))
 
-            if distance < 270:  # Trigger dialogue if player gets close
+            if distance < 270:  # trigger dialogue if player gets close
                 final_battle(self.player, krampus_sprite, self.display_surface, self.clock, self.visible_sprites)
 
+        if krampus_sprite is None:
+            play_cutscene(self.display_surface, "krampus defeated")
+            return
 
 class YCameraGroup (pygame.sprite.Group): # esse grupo de sprite vai funcionar como uma câmera através das coordenadas y
     

@@ -5,7 +5,7 @@ from support import *
 from player import *
 
 class Mob (Entity):
-    def __init__ (self, mob_name, pos, groups, obstacle_sprites, damage_player, trigger_death_particles): #feijoada de PUTAAAAA
+    def __init__ (self, mob_name, pos, groups, obstacle_sprites, damage_player, trigger_death_particles, add_xp): #feijoada de PUTAAAAA
 
         #setup
         super().__init__(groups)
@@ -39,6 +39,7 @@ class Mob (Entity):
         self.attack_cooldown = 500
         self.damage_player = damage_player
         self.trigger_death_particles = trigger_death_particles
+        self.add_xp = add_xp
 
         # invincibility timer
         self.vulnerable = True
@@ -126,14 +127,16 @@ class Mob (Entity):
             if attack_type == "weapon":
                 self.health -= player.get_full_weapon_damage()
             else:
-                pass #magic
+                self.health -= player.get_full_magic_damage() #magic
             self.hit_time = pygame.time.get_ticks()
             self.vulnerable = False
 
     def check_death(self):
         if self.health <= 0:
-            self.kill()
-            self.trigger_death_particles(self.rect.center, self.mob_name)
+                self.kill()
+                self.trigger_death_particles(self.rect.center, self.mob_name)
+                self.add_xp(self.xp)
+                
 
     def hit_reaction(self):
         if not self.vulnerable:

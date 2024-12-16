@@ -43,6 +43,8 @@ class Player (Entity):
 
         #stat
         self.stats = {"health": 100, "energy": 50, "attack": 10, "magic": 5, "speed": 5}
+        self.max_stats = {"health": 300, "energy": 150, "attack": 30, "magic": 15, "speed": 10}
+        self.upgrade_cost = {"health": 100, "energy": 100, "attack": 100, "magic": 100, "speed": 100}
         self.health = self.stats["health"] * 0.5
         self.energy = self.stats["energy"] * 0.8
         self.xp = 666
@@ -65,62 +67,63 @@ class Player (Entity):
 
     def input (self):
 
-        keys = pygame.key.get_pressed()
+        if not self.attacking:
+            keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_UP]:
-            self.direction.y = -1
-            self.status = "up"
-        elif keys[pygame.K_DOWN]:
-            self.direction.y = 1 
-            self.status = "down"
-        else:
-            self.direction.y = 0
-        if keys[pygame.K_RIGHT]:
-            self.direction.x = 1
-            self.status = "right"
-        elif keys[pygame.K_LEFT]:
-            self.direction.x = -1
-            self.status = "left"
-        else:
-            self.direction.x = 0
+            if keys[pygame.K_UP]:
+                self.direction.y = -1
+                self.status = "up"
+            elif keys[pygame.K_DOWN]:
+                self.direction.y = 1 
+                self.status = "down"
+            else:
+                self.direction.y = 0
+            if keys[pygame.K_RIGHT]:
+                self.direction.x = 1
+                self.status = "right"
+            elif keys[pygame.K_LEFT]:
+                self.direction.x = -1
+                self.status = "left"
+            else:
+                self.direction.x = 0
 
         #attack
-        if keys [pygame.K_SPACE] and not self.attacking:
-            self.attacking = True
-            self.attack_time = pygame.time.get_ticks ()
-            self.create_attack () #problema de blit // não ataca mais de +1
+            if keys [pygame.K_SPACE]:
+                self.attacking = True
+                self.attack_time = pygame.time.get_ticks ()
+                self.create_attack () #problema de blit // não ataca mais de +1
 
         #magic
-        if keys [pygame.K_LCTRL] and not self.attacking:
-            self.attacking = True
-            self.attack_time = pygame.time.get_ticks()
-            style = list(magic_data.keys())[self.magic_index]
-            strength = list(magic_data.values())[self.magic_index]["strength"] + self.stats["magic"]
-            cost = list(magic_data.values())[self.magic_index]["cost"]
-            self.create_magic (style, strength, cost)
+            if keys [pygame.K_LCTRL]:
+                self.attacking = True
+                self.attack_time = pygame.time.get_ticks()
+                style = list(magic_data.keys())[self.magic_index]
+                strength = list(magic_data.values())[self.magic_index]["strength"] + self.stats["magic"]
+                cost = list(magic_data.values())[self.magic_index]["cost"]
+                self.create_magic (style, strength, cost)
 
-        if keys [pygame.K_e] and self.can_switch_magic:
-            self.can_switch_magic = False
-            self.magic_switch_time = pygame.time.get_ticks()
+            if keys [pygame.K_e] and self.can_switch_magic:
+                self.can_switch_magic = False
+                self.magic_switch_time = pygame.time.get_ticks()
 
-            if self.magic_index < len(list(magic_data.keys())) - 1: #resolvido.
-                self.magic_index += 1 # só tem 3 AARGGGHHHHH
-            else:
-                self.magic_index = 0
+                if self.magic_index < len(list(magic_data.keys())) - 1: #resolvido.
+                    self.magic_index += 1 # só tem 3 AARGGGHHHHH
+                else:
+                    self.magic_index = 0
 
-            self.magic = list(magic_data.keys())[self.magic_index]
+                self.magic = list(magic_data.keys())[self.magic_index]
         
 
-        if keys [pygame.K_q] and self.can_switch_weapon:
-            self.can_switch_weapon = False
-            self.weapon_switch_time = pygame.time.get_ticks()
+            if keys [pygame.K_q] and self.can_switch_weapon:
+                self.can_switch_weapon = False
+                self.weapon_switch_time = pygame.time.get_ticks()
 
-            if self.weapon_index < len(list(weapon_data.keys())) - 1: #resolvido.
-                self.weapon_index += 1 # só tem 3 AARGGGHHHHH
-            else:
-                self.weapon_index = 0
+                if self.weapon_index < len(list(weapon_data.keys())) - 1: #resolvido.
+                    self.weapon_index += 1 # só tem 3 AARGGGHHHHH
+                else:
+                    self.weapon_index = 0
 
-            self.weapon = list(weapon_data.keys())[self.weapon_index]
+                self.weapon = list(weapon_data.keys())[self.weapon_index]
 
     def get_status (self):
         
@@ -186,6 +189,17 @@ class Player (Entity):
         weapon_damage = weapon_data[self.weapon]["damage"]
         return base_damage + weapon_damage
 
+    def get_full_magic_damage(self):
+        base_damage = self.stats["magic"]
+        spell_damage = magic_data[self.magic]["strength"]
+        return base_damage + spell_damage
+
+    def energy_recovery(self):
+        if self.energy < self.stats["energy"]:
+            self.energy += 0.01 * self.stats["magic"]
+        else:
+            self.energy = self.stats["energy"]
+
     def update (self):
         
         self.input()
@@ -193,3 +207,4 @@ class Player (Entity):
         self.get_status()
         self.animate ()
         self.move(self.sp)
+        self.energy_recovery()
